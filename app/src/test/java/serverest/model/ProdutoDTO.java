@@ -8,12 +8,14 @@ public class ProdutoDTO {
     private Integer preco;
     private String descricao;
     private Integer quantidade;
+    private String idProduto;
 
     public ProdutoDTO(String nome, Integer preco, String descricao, Integer quantidade) {
         this.nome = nome;
         this.preco = preco;
         this.descricao = descricao;
         this.quantidade = quantidade;
+        this.idProduto = null;
     }
 
     public String getNome() {
@@ -31,4 +33,9 @@ public class ProdutoDTO {
     public Integer getQuantidade() {
         return quantidade;
     }
+
+    public String getIdProduto() { return idProduto; }
+
+    public void setIdProduto(String idProduto) { this.idProduto = idProduto; }
+
 }

@@ -9,6 +9,9 @@ public class UsuarioDTO {
     private String password;
     private String administrador;
 
+    private String idUsuario;
+
+
     public UsuarioDTO(String administrador) {
         Faker faker = new Faker();
         this.nome = faker.name().firstName();
@@ -39,4 +42,8 @@ public class UsuarioDTO {
     public String getAdministrador() {
         return administrador;
     }
+
+    public String getIdUsuario() { return idUsuario; }
+
+    public void setIdUsuario(String idUsuario) { this.idUsuario = idUsuario; }
 }

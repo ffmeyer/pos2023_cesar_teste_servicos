@@ -34,8 +34,18 @@ public class Carrinho {
         .when()
                 .delete(Environment.localhost + Endpoint.cancelarCompra)
         .then()
-                .log().all()
                 .statusCode(statusCode)
                 .body("message", is(message));
     }
+
+    public static void concluirCompra(String userToken, Integer statusCode, String message) {
+        given()
+                .header("authorization", userToken)
+        .when()
+                .delete(Environment.localhost + Endpoint.concluirCompra)
+        .then()
+                .statusCode(statusCode)
+                .body("message", is(message));
+    }
+
 }

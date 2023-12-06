@@ -19,8 +19,8 @@ public class Usuario {
                 .statusCode(HttpStatus.SC_OK);
     }
 
-    public static String cadastrarUsuario(UsuarioDTO usuarioDTO, Integer statusCode, String message) {
-        return given()
+    public static UsuarioDTO cadastrarUsuario(UsuarioDTO usuarioDTO, Integer statusCode, String message) {
+        String idUsuario = given()
                 .body("{\n" +
                         "  \"nome\": \"" + usuarioDTO.getNome() + "\",\n" +
                         "  \"email\": \"" + usuarioDTO.getEmail() + "\",\n" +
@@ -34,6 +34,8 @@ public class Usuario {
                 .statusCode(statusCode)
                 .body("message", is(message))
                 .extract().path("_id");
+        usuarioDTO.setIdUsuario(idUsuario);
+        return usuarioDTO;
     }
 
     public static String autenticarUsuario(UsuarioDTO usuarioDTO, Integer statusCode, String mensage) {
@@ -47,7 +49,19 @@ public class Usuario {
                 .post(Environment.localhost + Endpoint.login)
         .then()
                 .statusCode(statusCode)
-            .body("message", is(mensage))
+                .body("message", is(mensage))
                 .extract().path("authorization");
+    }
+
+    public static void  excluirUsuario(UsuarioDTO usuarioDTO, Integer statusCode, String message) {
+                given()
+                    .pathParam("_id", usuarioDTO.getIdUsuario())
+                    .contentType(ContentType.JSON)
+                .when()
+                    .delete(Environment.localhost + Endpoint.usuariosId)
+                .then()
+                    .statusCode(statusCode)
+                    .body("message", is(message))
+                    .extract().path("message");
     }
 }

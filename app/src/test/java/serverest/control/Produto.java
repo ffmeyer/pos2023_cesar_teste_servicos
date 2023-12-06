@@ -20,8 +20,8 @@ public class Produto {
                 .statusCode(HttpStatus.SC_OK);
     }
 
-    public static String cadastrarProduto(ProdutoDTO produtoDTO, String userToken, Integer statusCode, String message) {
-        return given()
+    public static ProdutoDTO cadastrarProduto(ProdutoDTO produtoDTO, String userToken, Integer statusCode, String message) {
+         String idproduto = given()
                 .header("authorization", userToken)
                 .body("{\n" +
                         "  \"nome\": \"" + produtoDTO.getNome() + "\",\n" +
@@ -36,6 +36,8 @@ public class Produto {
                 .statusCode(statusCode)
                 .body("message", is(message))
                 .extract().path("_id");
+        produtoDTO.setIdProduto(idproduto);
+        return produtoDTO;
     }
 
     public static void verificarEstoque(String productId, Integer quantidadeEsperada) {
@@ -50,8 +52,23 @@ public class Produto {
     public static ProdutoDTO gerarPokemon(Integer preco, Integer quantidade) {
         Faker faker = new Faker();
         String nome = faker.pokemon().name();
-        String descricao = "Pokemon";
+        String descricao = "Figure pokemon " + nome;
         ProdutoDTO produtoDTO = new ProdutoDTO(nome, preco, descricao, quantidade);
         return produtoDTO;
     }
+
+
+    public static void excluirProduto (ProdutoDTO produtoDTO, String userToken, Integer statusCode, String message) {
+        given()
+                .header("authorization", userToken)
+                .pathParam("_id", produtoDTO.getIdProduto())
+                .contentType(ContentType.JSON)
+        .when()
+                .delete(Environment.localhost + Endpoint.produtosId)
+        .then()
+                .statusCode(statusCode)
+                .body("message", is(message))
+                .extract().path("message");
+    }
+
 }
